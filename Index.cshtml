@@ -1,0 +1,138 @@
+@using PagedList.Mvc;
+@model ViewModel.EmployeeViewModel
+
+@{
+    ViewBag.Title = "Index";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<div class ="container">
+<div class="panel panel-default">
+<div class="panel-body">
+
+                                    
+@using (Html.BeginForm("Index", "EmployeeController", FormMethod.Get))
+{
+<div class ="input-group">
+@Html.TextBox("Id", null, new { @class = "form-control", @placeholder="Enter Employee ID" })
+<span class="input-group-btn">
+<button class ="btn btn-primary">Search!</button>
+</span>   
+</div>
+}
+
+
+</div>
+</div>
+            
+<div class="panel panel-default">
+<div class="panel-heading"><h4>Employee</h4></div>
+<div class="panel-body">
+<table class="table table-condensed table-hover">
+<tr></tr>
+@foreach (var item in Model.Employees)
+{
+<tr>
+<td>Employee ID:</td>
+<td>
+@Html.DisplayTextFor(modelItem => item.EMP_ID)
+</td>
+</tr>
+<tr>
+<td>Name:</td>
+<td>
+@Html.DisplayTextFor(modelItem => item.FNAME)
+@Html.DisplayTextFor(modelItem => item.MNAME)
+@Html.DisplayTextFor(modelItem => item.LNAME)
+</td>
+</tr>
+<tr>
+<td>Birth Date:</td>
+<td>
+@Html.DisplayTextFor(modelItem => item.BDAY)
+</td>
+</tr>
+<tr>
+<td>Status:</td>
+<td>
+@Html.DisplayTextFor(modelItem => item.ACTIVE)
+</td>
+</tr>                                        
+<tr>
+<td>Remaining Balance:</td>
+<td>
+@Html.DisplayTextFor(modelItem => item.REPAMT)
+</td>
+</tr>    
+}
+</table>
+</div>
+<div class="panel-footer">
+@using (Html.BeginForm("Employee", "Employee", FormMethod.Get))
+{
+<fieldset>
+<div class ="btn-toolbar pull-right">
+<input type="submit" value="Add" class="btn btn-primary"/>
+<input type="submit" value="Edit" class ="btn btn-primary"/>
+</div>
+</fieldset>
+}
+</div>
+</div>
+
+<div class="panel panel-default">
+<div class="panel-heading"><h4>Transaction</h4></div>
+<div class="panel-body">
+<table class="table table-condensed table-hover">
+<tr>
+<td>
+Employee ID
+</td>
+<td>
+Amount
+</td>
+<td>
+Type
+</td>
+<td>
+Transaction Date
+</td>
+</tr>
+@foreach (var item2 in Model.Transactions)
+{
+<tr>
+<td>
+@item2.EMP_ID
+</td>
+<td>
+@item2.CANTAMT
+</td>
+<td>
+@item2.CANTCODE
+</td>
+<td>
+@item2.CANTDATETIME
+</td>
+</tr>
+}
+</table>
+<center>
+Page @(Model.Transactions.PageCount < Model.Transactions.PageNumber ? 0 : Model.Transactions.PageNumber) of @Model.Transactions.PageCount
+@Html.PagedListPager(Model.Transactions, page => Url.Action("Index", new { Id = ViewBag.Id, pageNum = page }))
+</center>
+</div>
+<div class="panel-footer">
+@using (Html.BeginForm("Transaction", "Employee"))
+{
+@Html.ValidationSummary(true)
+<fieldset>
+<div class="btn-toolbar pull-right">
+<input type="submit" value="Add" class ="btn btn-primary" />
+<input type="submit" value="Edit" class="btn btn-primary" />
+<input type="submit" value="Delete" class="btn btn-primary" />
+</div>
+</fieldset>
+}
+</div>
+</div>
+</div>
